@@ -27,7 +27,6 @@
 
 <script>
 
-    
 // Fetch and parse your JSON data
 fetch('42k.json')
   .then(response => response.json())
@@ -42,21 +41,31 @@ fetch('42k.json')
       attribution: 'Map data © OpenStreetMap contributors'
     }).addTo(map);
 
-    // Add markers and measure performance
-    const startTime = performance.now();
+    // Create a marker cluster group
+    const markerClusterGroup = L.markerClusterGroup();
 
+    // Start the timer
+    console.time('Marker placement');
+
+    // Add markers to the marker cluster group
     markers.forEach(marker => {
-      const { latitude, longitude } = marker;
+      const { lat, lon, title } = marker;
 
       // Create a Leaflet marker object
-      L.marker([latitude, longitude]).addTo(map);
+      const leafletMarker = L.marker([lat, lon]).bindPopup(title);
+
+      // Add the marker to the marker cluster group
+      markerClusterGroup.addLayer(leafletMarker);
     });
 
-    const endTime = performance.now();
-    const performanceTime = endTime - startTime;
-    console.log(`Performance time: ${performanceTime} ms`);
+    // Add the marker cluster group to the map
+    map.addLayer(markerClusterGroup);
+
+    // Stop the timer and display the duration
+    console.timeEnd('Marker placement');
   })
   .catch(error => console.error(error));
+
 
 
 
