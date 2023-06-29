@@ -34,7 +34,7 @@ fetch('42k.json')
     const markers = data.markers; // Assuming your JSON structure has an array of markers
 
     // Initialize the map
-    const map = L.map('map').setView([latitude, longitude], zoomLevel); // Set your desired initial view
+    const map = L.map('map').setView([50, 2], 9); // Set your desired initial view
 
     // Add the map tile layer (e.g., OpenStreetMap)
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
