@@ -36,7 +36,7 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 
 // Load GeoJSON data and create markers with clustering
 const startTime = performance.now();
-$.getJSON('aopk_nalezy_50k.geojson', function(data) {
+$.getJSON('11kpoints.geojson', function(data) {
   const markers = L.geoJson(data, {
     pointToLayer: function(feature, latlng) {
       return L.marker(latlng);
