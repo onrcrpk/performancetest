@@ -27,32 +27,36 @@
 
 <script>
 
-// Create the map
-const map = L.map('map').setView([0, 0], 2);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: 'Map data © <a href="https://openstreetmap.org">OpenStreetMap</a> contributors',
-  maxZoom: 18,
-}).addTo(map);
+    
+// Fetch and parse your JSON data
+fetch('40k.json')
+  .then(response => response.json())
+  .then(data => {
+    const markers = data.markers; // Assuming your JSON structure has an array of markers
 
-// Load GeoJSON data and create markers with clustering
-const startTime = performance.now();
-$.getJSON('50k.geojson', function(data) {
-  const markers = L.geoJson(data, {
-    pointToLayer: function(feature, latlng) {
-      return L.marker(latlng);
-    }
-  });
+    // Initialize the map
+    const map = L.map('map').setView([latitude, longitude], zoomLevel); // Set your desired initial view
 
-  const markerCluster = L.markerClusterGroup();
-  markerCluster.addLayers(markers.getLayers());
+    // Add the map tile layer (e.g., OpenStreetMap)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: 'Map data © OpenStreetMap contributors'
+    }).addTo(map);
 
-  const endTime = performance.now();
-  const markerCreationTime = endTime - startTime;
-  console.log(`Marker creation time: ${markerCreationTime} milliseconds`);
+    // Add markers and measure performance
+    const startTime = performance.now();
 
-  map.addLayer(markerCluster);
-});
+    markers.forEach(marker => {
+      const { latitude, longitude } = marker;
 
+      // Create a Leaflet marker object
+      L.marker([latitude, longitude]).addTo(map);
+    });
+
+    const endTime = performance.now();
+    const performanceTime = endTime - startTime;
+    console.log(`Performance time: ${performanceTime} ms`);
+  })
+  .catch(error => console.error(error));
 
 
 
